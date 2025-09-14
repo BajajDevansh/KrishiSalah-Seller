@@ -39,10 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.codesmiths.KrishiSalah.R
+import com.codesmiths.KrishiSalah.models.SignUpRequest
+import com.codesmiths.KrishiSalah.viewModels.UserViewModel
 
 @Composable
 fun SignUpScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: UserViewModel
 ) {
     var name by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
@@ -176,7 +179,20 @@ fun SignUpScreen(
 
                         Button(
                             onClick = {
-                                navController.navigate("home")
+                                viewModel.signUp(
+                                    SignUpRequest(
+                                        name,
+                                        phoneNumber,
+                                        password,
+                                        village,
+                                        district,
+                                        state,
+                                        pincode
+                                    )
+                                )
+                                if(viewModel.registerState.value.isSuccess){
+                                    navController.navigate("home")
+                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()

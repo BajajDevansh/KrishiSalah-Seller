@@ -40,10 +40,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.codesmiths.KrishiSalah.R
+import com.codesmiths.KrishiSalah.models.LoginRequest
+import com.codesmiths.KrishiSalah.viewModels.UserViewModel
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: UserViewModel
 ){
     var phoneNumber by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -114,7 +117,15 @@ fun LoginScreen(
 
                     Button(
                         onClick = {
-                            navController.navigate("home")
+                            viewModel.login(
+                                LoginRequest(
+                                    phoneNumber,
+                                    password
+                                )
+                            )
+                            if(viewModel.loginState.value.isSuccess) {
+                                navController.navigate("home")
+                            }
                         },
                         modifier = Modifier
                             .fillMaxWidth()

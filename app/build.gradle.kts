@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("kapt")
-//    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -48,15 +47,15 @@ dependencies {
     //nav component
     implementation("androidx.navigation:navigation-compose:$nav_version")
     //view model/lifecycle
-//    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
-//    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
-//    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
 //    //coroutines
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     //Retrofit + okHttp
-//    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
-//    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
-//    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     //coil
 //    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
 //    //camera
@@ -67,10 +66,8 @@ dependencies {
     //location
 //    implementation ("com.google.android.gms:play-services-maps:18.2.0")
 //    implementation( "com.google.android.gms:play-services-location:21.3.0")
-    //dagger hilt
-//    implementation ("com.google.dagger:hilt-android:2.52")
-//    kapt ("com.google.dagger:hilt-compiler:2.52")
-//    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
+    //shared prefs
+    implementation ("androidx.security:security-crypto:1.1.0-alpha06")
 
 
     implementation(libs.androidx.core.ktx)
