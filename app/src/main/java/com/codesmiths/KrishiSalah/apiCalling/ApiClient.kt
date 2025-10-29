@@ -3,7 +3,7 @@ package com.codesmiths.KrishiSalah.apiCalling
 import android.content.Context
 
 object ApiClient {
-    private const val BASE_URL="https://23f987170e72.ngrok-free.app/"
+    private const val BASE_URL="https://b4e0932317c8.ngrok-free.app/"
 
     fun create(context: Context): ApiService{
         val tokenManager= TokenManager.getInstance(context)

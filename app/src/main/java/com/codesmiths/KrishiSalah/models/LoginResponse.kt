@@ -1,6 +1,5 @@
 package com.codesmiths.KrishiSalah.models
 
-import android.os.Message
 
 data class LoginResponse(
     val success: Boolean,

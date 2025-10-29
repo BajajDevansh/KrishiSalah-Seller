@@ -1,34 +1,21 @@
 package com.codesmiths.KrishiSalah.screens
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
@@ -39,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,24 +33,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.codesmiths.KrishiSalah.R
-import com.codesmiths.KrishiSalah.models.Products
-import com.codesmiths.KrishiSalah.viewModels.UserViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ListingsScreen(
-    navController: NavController,
-    viewModel: UserViewModel
+fun OrderScreen(
+    navController: NavController
 ){
     val bottomItems = listOf(
         BottomNavItem("Home", R.drawable.outline_home_24, "home"),
@@ -72,10 +52,7 @@ fun ListingsScreen(
         BottomNavItem("Orders", R.drawable.outline_draft_orders_24, "orders"),
         BottomNavItem("Advisory", R.drawable.outline_mobile_chat_24, "advisory")
     )
-    var selectedBottomItem by rememberSaveable { mutableStateOf("Listings") }
-    LaunchedEffect(Unit){
-        viewModel.getProducts()
-    }
+    var selectedBottomItem by rememberSaveable { mutableStateOf("Orders") }
     val drawerState= rememberDrawerState(DrawerValue.Closed)
     val scope= rememberCoroutineScope()
     ModalNavigationDrawer(
@@ -99,9 +76,7 @@ fun ListingsScreen(
         }
     ) {
         Scaffold(
-            modifier = Modifier
-                .windowInsetsPadding(WindowInsets.statusBars)
-                .windowInsetsPadding(WindowInsets.navigationBars),
+            modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
             topBar = {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -123,7 +98,7 @@ fun ListingsScreen(
 
                     }
                     Text(
-                        "Your Listings", fontSize = 21.sp,
+                        "Orders Received", fontSize = 21.sp,
                         fontWeight = FontWeight.Bold
                     )
                     IconButton(
@@ -167,126 +142,43 @@ fun ListingsScreen(
                         )
                     }
                 }
-            },
-            floatingActionButton = {
-                FloatingActionButton(onClick = {
-                    navController.navigate("add_listings")
-                }) {
-
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = "Add Listing",
-                        modifier = Modifier.size(26.dp)
-                    )
-                }
             }
         ) {
-            LazyColumn(modifier = Modifier.padding(it)) {
-                items(viewModel.getProductsList.value) {
-                    ProductListItem(product = it)
-                }
-            }
+            Modifier.padding(it)
         }
     }
 }
+
 @Composable
-fun BottomBarItem(
-    icon: Int,
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit){
-    Column( horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center ){
-        IconButton(onClick = onClick) {
-            Icon( painter = painterResource(icon),
-                contentDescription = label,
-                modifier = Modifier.size(24.dp),
-                tint = if (isSelected) { Color.Black } else { Color.Gray } ) }
-    Text(label,
-        color = if (isSelected) {Color.Black} else {Color.Gray})
-    }
-}
-@Composable
-fun ProductListItem(
-    product: Products,
-    modifier: Modifier = Modifier
-) {
+fun OrderItem(
+    img:Int,
+    name:String,
+    variety:String,
+    onclick:()-> Unit
+){
     ElevatedCard(
-        modifier = modifier
+        onClick = onclick,
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+            .padding(20.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+        Row (
             verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Show product image
-            val firstImage = product.images.firstOrNull()
-            val bitmap = firstImage?.let { base64ToBitmap(it) }
-
-            if (bitmap != null) {
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = product.productName,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color.LightGray),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                // Fallback default image
-                Image(
-                    painter = painterResource(R.drawable.ic_placeholder), // add placeholder in res/drawable
-                    contentDescription = "Default Image",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color.LightGray),
-                    contentScale = ContentScale.Crop
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            // Product details
+        ){
+            Image(
+                painter = painterResource(img),
+                contentDescription = name,
+                modifier = Modifier.size(120.dp)
+            )
+            Spacer(modifier = Modifier.width(10.dp))
             Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = product.productName,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "Category: ${product.category}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
-                )
-                Text(
-                    text = "Listed: ${product.quantity} ${product.unit}",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = "Remaining: ${product.currentQuantity} ${product.unit}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF008324)
-                )
+                modifier = Modifier.padding(top=10.dp),
+                verticalArrangement = Arrangement.Center,
+
+                ) {
+                Text(name, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text(variety, fontSize = 16.sp, color = Color.Gray)
             }
         }
-    }
-}
-
-fun base64ToBitmap(base64Str: String): Bitmap? {
-    return try {
-        val decodedBytes = Base64.decode(base64Str, Base64.DEFAULT)
-        BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-    } catch (e: Exception) {
-        null
     }
 }

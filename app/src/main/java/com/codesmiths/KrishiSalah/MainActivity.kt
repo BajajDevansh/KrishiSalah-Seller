@@ -15,33 +15,32 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.codesmiths.KrishiSalah.screens.AddListingPage
+import com.codesmiths.KrishiSalah.screens.FertilizerPredictionScreen
 import com.codesmiths.KrishiSalah.screens.HomeScreen
+import com.codesmiths.KrishiSalah.screens.LeafDiseaseDetectionScreen
+
+import com.codesmiths.KrishiSalah.screens.ListingsScreen
 import com.codesmiths.KrishiSalah.screens.LoginScreen
+import com.codesmiths.KrishiSalah.screens.OrderScreen
 import com.codesmiths.KrishiSalah.screens.SignUpScreen
 import com.codesmiths.KrishiSalah.screens.WelcomeScreen
 
 import com.codesmiths.KrishiSalah.ui.theme.KrishiSalahTheme
 import com.codesmiths.KrishiSalah.viewModels.UserViewModel
 
-
-//import dagger.hilt.android.AndroidEntryPoint
-
-//@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var viewModel: UserViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val factory = UserViewModelFactory(applicationContext)
-        viewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory).get(UserViewModel::class.java)
         setContent {
 
             KrishiSalahTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                   Navigation(
-                       Modifier.padding(innerPadding),
-                       viewModel
-                   )
+                    Navigation(Modifier.padding(innerPadding),viewModel)
                 }
             }
         }
@@ -77,7 +76,19 @@ fun Navigation(modifier: Modifier= Modifier,viewModel: UserViewModel){
             HomeScreen(navController)
         }
         composable("listings"){
-
+            ListingsScreen(navController,viewModel)
+        }
+        composable("add_listings") {
+            AddListingPage(viewModel, navController)
+        }
+        composable("orders") {
+            OrderScreen(navController)
+        }
+        composable("disease_detection") {
+            LeafDiseaseDetectionScreen(viewModel)
+        }
+        composable("fertiliser_advisory") {
+            FertilizerPredictionScreen(viewModel)
         }
     }
 }
